@@ -1,4 +1,34 @@
-# FreeRange Custody API Documentation
+# FreeRange Custody API
+
+## Table of Contents
+- [Introduction](#introduction)
+  - [Key features](#key-features)
+- [Database schema overview](#database-schema-overview)
+  - [Nodes](#nodes)
+    - [General](#general)
+    - [Key management related](#key-management-related)
+    - [Other](#other)
+  - [Relationships](#relationships)
+    - [General](#general-1)
+    - [Key management related](#key-management-related-1)
+- [Node details with API endpoints](#node-details-with-api-endpoints)
+  - [`accounts`](api_docs/accounts/accounts.md)
+  - [`computers`](api_docs/computers/computers.md)
+  - [`containers`](api_docs/containers/containers.md)
+  - [`entropy_sources`](api_docs/entropy_sources/entropy_sources.md)
+  - [`facilities`](api_docs/facilities/facilities.md)
+  - [`key_ceremonies`](api_docs/key_ceremonies/key_ceremonies.md)
+  - [`key_managers`](api_docs/key_managers/key_managers.md)
+  - [`key_storage_devices`](api_docs/key_storage_devices/key_storage_devices.md)
+  - [`locations`](api_docs/locations/locations.md)
+  - [`organizations`](api_docs/organizations/organizations.md)
+  - [`public_keys`](api_docs/public_keys/public_keys.md)
+  - [`rooms`](api_docs/rooms/rooms.md)
+  - [`seeds`](api_docs/seeds/seeds.md)
+  - [`seed_backups`](api_docs/seed_backups/seed_backups.md)
+  - [`wallet_addresses`](api_docs/wallet_addresses/wallet_addresses.md)
+
+## Introduction
 
 `fr-custody-api` is a backend solution for **designing**, **managing**, and / or **auditing** an organization's crypto self-custody operations. 
 
@@ -11,7 +41,7 @@ Useful for:
 - Private offices
 - Any group or organization wanting to self-custody crypto-assets.
 
-### Key Features
+### Key features
 
 **Design bank-grade self-custody solutions**
 - Document and plan out the infrastructure needed for self-custody operations. 
@@ -22,23 +52,27 @@ Useful for:
 **Manage self-custody operations at scale** 
 - Track team member access to key storage devices and seed backups.
 - Generate and manage accounts.
-- Document everything needed for key ceremony events.    
+- Document everything needed for key ceremony events.   
+- and more... 
  
 **Powerful analytics tools for auditing and risk management.** 
 - Built with technical assistance from Sandia National Laboratories. 
 - Leverage graph data algorithms to uncover gaps and weaknesses in an organization's custody operations
-- Determine risk of fraud collusion, seed compromise, key ceremony compromise, penetrative forced intrusion of storage facilities, and much more...
-- Generate reports needed for compliance  
+- Determine risk of fraud collusion, seed compromise, key ceremony compromise, penetrative forced intrusion of storage facilities, etc...
+- Store and generate the data needed for compliance reporting.  
 
 > *Note: Sandia National Laboratories are also customers of FreeRange for digital asset risk management and procrument. Find out more about the mission of Sandia National Labs [here](https://www.sandia.gov).*   
 
-**Security is our primary focus.** FreeRange never stores, generates or has access to an organization's private keys.
+**Security is our primary focus.** 
+- FreeRange never stores, generates or has access to an organization's private keys.
 
-## Database Schema Overview
+The technical build overview can be found [here](/build_overview.md).
+
+## Database schema overview
 
 `fr-custody-api` uses a graph database model that gives a greater emphasis on relationships.
 
-Use the API to build custom self-custody models, then leverage graph-based queries to analyze risk and compliance with custody standards such as those from the CryptoCurrency Certification Consortium (C4) which can be found [here](https://cryptoconsortium.github.io/CCSS/).
+Use the API to generate self-custody models, then leverage graph-based queries to analyze risk and compliance with custody standards such as those from the CryptoCurrency Certification Consortium (C4) which can be found [here](https://cryptoconsortium.github.io/CCSS/).
 
 Summary for Developers: 
 - Nodes are the main data elements
@@ -46,45 +80,41 @@ Summary for Developers:
 - Relationships connect two nodes
 - Both Nodes and Relationships can have one or more properties (i.e., attributes stored as key/value pairs)
 
-Below are the table overviews for nodes and relationships in the FreeRange graph database schema. 
+### Nodes
 
-## Nodes Overview
-
-> *Note: More detailed tables defining the properties of each node can be found by clicking on the links in the left column.*
-
-### General
+#### General
 
 | Nodes | Description | 
 | --- | --- |
-| [`organizations`](#organizations) | Groups of people collectively managing digital assets and/or their respective cryptographic public / private key pairings |
-| [`accounts`](#accounts) | Collections of managed `wallet_addresses` belonging to the same blockchain network, grouped for accounting purposes |
-| [`public_keys`](#public-keys) | Cryptographic keys assigned to `accounts`, of which private key pairings are managed by `organizations`, and are used for signing `transactions` |
-| [`wallet_addresses`](#wallet-addresses) | An address on a blockchain network used for the assignment and accounting of digital assets |
+| `organizations` | Comprise of `key_managers` collectively managing digital assets and/or their respective cryptographic public / private key pairings |
+| `accounts` | Collections of managed `wallet_addresses` belonging to the same blockchain network, grouped for accounting purposes |
+| `public_keys` | Cryptographic keys assigned to `accounts`, of which private key pairings are managed by `organizations`, and are used for signing `transactions` |
+| `wallet_addresses` | An address on a blockchain network used for the assignment and accounting of digital assets |
 
-### Key Management Related 
+#### Key management related 
 
 | Nodes | Description |
 | --- | --- |
-| [`facilities`](#facilities) | An installation, building, or segerated space within used for the operations of organizations. Examples would be a house, bank branch, etc. Some facilities will be more hardened and have different levels of access control than others. |
-| [`computers`](#computers) | Electronic devices used in processing and / or storing data related to key management, including `key_ceremonies`. An example would be an "air-gapped" notebook.  |
-| [`containers`](#containers) | A physical object (ideally within a building) used for storing and securing items such as `key_storage_devices`. An example would be a safe deposit box or Faraday bag. Multiple types of `containers` can be nested within each other. |
-| [`entropy_sources`](#entropy-sources) | Software, hardware, or analog derived (ex. deck of cards) randomness used in generating keys during `key_ceremonies` |
-| [`key_ceremonies`](#key-ceremonies) | Procedural events where `organizations` generates unique public / private root keys used to store digital assets |
-| [`key_managers`](#key-managers) | Members of `organizations` that has access to, and / or helps generate public / private key pairs |
-| [`key_storage_devices`](#key-storage-devices) | A medium that stores public / private key pairs (ex. a Trezor or a piece of paper) |
-| [`rooms`](#rooms) | A physical space within a facility, such as a vault for storing and securing `key_storage_devices`, or a  windowless room for holding `key_ceremony` events. |
-| [`seeds`](#seeds) | Mnemonic phrases generated by `organizations` during a `key_ceremonies`, associated with and helps recover `wallet_addresses` tied to `key_storage_devices` |
-| [`seed_backups`](#seed-backups) | (M of N) physical mediums (ex. engraved titanium plates) used to distribute portions of a `seed` amongst different geographical locations, allowing `organizations` to recover access to digital assets in case of `key_storage_device` failure. Idealy resistant to EMP, blast, fire, flood, etc |
+| `facilities` | An installation, building, or segerated space within used for the operations of organizations. Examples would be a house, bank branch, etc. Some facilities will be more hardened and have different levels of access control than others. |
+| `computers`| Electronic devices used in processing and / or storing data related to key management, including `key_ceremonies`. An example would be an "air-gapped" notebook.  |
+| `containers` | A physical object (ideally within a building) used for storing and securing items such as `key_storage_devices`. An example would be a safe deposit box or Faraday bag. Multiple types of `containers` can be nested within each other. |
+| `entropy_sources`| Software, hardware, or analog derived (ex. deck of cards) randomness used in generating keys during `key_ceremonies` |
+| `key_ceremonies` | Procedural events where `organizations` generates unique public / private root keys used to store digital assets |
+| `key_managers` | Members of `organizations` that has access to, and / or helps generate public / private key pairs |
+| `key_storage_devices` | A medium that stores public / private key pairs (ex. a Trezor or a piece of paper) |
+| `rooms` | A physical space within a facility, such as a vault for storing and securing `key_storage_devices`, or a  windowless room for holding `key_ceremony` events. |
+| `seeds` | Mnemonic phrases generated by `organizations` during a `key_ceremonies`, associated with and helps recover `wallet_addresses` tied to `key_storage_devices` |
+| `seed_backups` | (M of N) physical mediums (ex. engraved metal plates) used to distribute portions of a `seed` amongst different geographical locations, allowing `organizations` to recover access to digital assets in case of `key_storage_device` failure. Idealy resistant to EMP, blast, fire, flood, etc |
 
-### Other
+#### Other
 
 | Nodes| Description |
 | --- | --- |
-| [`locations`](#locations) | These nodes describe the name and position of a physical item using addresses, coordinates, and / or landmarks. Other nodes (example: a safe deposit box `container` or a `key_manager`) can be connected to a `location` node via the `located_at` relationship to track and visualize geographic distribution of key management systems. If multiple `containers` are nested within each other (example: a safe deposit box nested within a vault nested within a facility) the `location` node should only attach to the parent `container` |
+| `locations` | These nodes describe the name and position of a physical item using addresses, coordinates, and / or landmarks. Other nodes (example: a safe deposit box `container` or a `key_manager`) can be connected to a `location` node via the `located_at` relationship to track and visualize geographic distribution of key management systems. If multiple `containers` are nested within each other (example: a safe deposit box nested within a vault nested within a facility) the `location` node should only attach to the parent `container` |
 
-## Relationships Overview
+### Relationships
 
-### General
+#### General
 
 | Relationships| Description |
 | --- | --- |
@@ -94,7 +124,7 @@ Below are the table overviews for nodes and relationships in the FreeRange graph
 | `located_at`| Tracks the location of other nodes. An example would be `key_storage_device` => `located_at` => `location` |
 | `transaction` | Events where `wallet_addresses` sends or receives digital assets on a blockchain ledger |
 
-### Key Management Related
+#### Key management related
 
 | Relationships| Description |
 | --- | --- |
@@ -106,412 +136,20 @@ Below are the table overviews for nodes and relationships in the FreeRange graph
 | `seeded` | Connects which `seed` was used to initalize a `key_storage_device` during a `key_generation_ceremony` |
 | `stored_in` | Connects `key_storage_devices` and `seed_backups` to the `containers` which they are stored in. Multiple types of `containers` can be nested within each other. An example would be `key_storage_device` => `stored_in` => a safe depost box `container` => `stored_in` => a bank vault `container`. This chaining becomes valuable when managng different layers of access control to containers through the `has_access_to` relationship. |
 
-## Detailed Property Lists for Nodes
+## Node details with API endpoints
 
-### Organizations
-
-| Properties | Description |
-| --- | --- |
-| `background_color` | Used for the node's sprite color. Rendered with ThreeJS/WebGl. |
-| `border_color` | Used for the node's sprite border color. Rendered with ThreeJS/WebGl. |
-| `contact_name` | The name of the primary contact person of the organization. |
-| `contact_title` | The title of the primary contact person of the organization. |
-| `contact_phone` | The phone number of the primary contact person of the organization. |
-| `description` | A short descrption of the organization. |
-| `email` | The primary contact email of the organization. |
-| `entity_type` | The organization type. Types can be: `bank`, `company`, `family_office` `foundation`, `trust_company`, `other`  |
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_many` | `accounts` | `belongs_to` |
-| `has_many` | `facilities` | `belongs_to` |
-| `has_many` | `computers` | `belongs_to` |
-| `has_many` | `containers` | `belongs_to` |
-| `has_many` | `entropy_sources` | `belongs_to` |
-| `has_many` | `key_managers` | `belongs_to` |
-| `has_many` | `key_storage_devices` | `belongs_to` |
-| `has_many` | `locations` | `located_at` |
-| `has_many` | `rooms` | `belongs_to` |
-
-### Accounts
-
-| Properties | Description |
-| --- | --- |
-| `account_number` | An optional identifier that can be used as a cross reference for financial institutions  |
-| `account_type` | Options include `bitcoin` and `ethereum`. Note there is currently no support for signing Ethereum transactions through the FreeRange webapp, but it is still useful for tracking.  |
-| `address_type` | Used when the `account_type` is `bitcoin`. Options include `P2SH`, `P2SH-P2WSH`, `P2WSH` |
-| `available_balance` | The available balance of the account. | 
-| `border_color` | Used for the node's sprite border color. Rendered with ThreeJS/WebGl. |
-| `background_color` | Used for the node's sprite border color. Rendered with ThreeJS/WebGl. |
-| `description` | A short descrption of the `account`. |
-| `email` | The email address to be used in case notifications regarding the `account` need to be sent.  |
-| `name` | The name of the account. |
-| `network` | The blockchain network of the `account_type`. Current options are `mainnet` and `testnet`, with future support planned for additional Ethereum testnets. |
-| `required_signers` | The minimum number of signers needed for signing transactions. Can be one, but this will render the multi-sig bitcoin wallet feature non-functional for the FreeRange front end. Still useful for tracking non-compliance with C4 standards. |
-| `token_balance` | *Only needed if tracking tokens.* This describes the balance of additional token types (such as ERC20) attributed to the wallet addresses of the account. Requires `token_contract_address`, `token_decimals`, and `token_symbol` |
-| `token_contract_address` | *Only needed if tracking tokens.* This refers to the address of the actual token contract that manages the logic for the tokens. |
-| `token_decimals` | *Only needed if tracking tokens.* The number of decimals specified in the token contract.  |
-| `token_symbol` | *Only needed if tracking tokens.* The letter symbol used by the token. |
-| `total_balance` | The total balance of the account. |
-| `total_signers` | The total number of signers assigned to the account. |
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_one` | `organization` | `belongs_to` |
-| `has_many` | `wallet_addresses` | `assigned_to` |
-| `has_many` | `public_keys` | `assigned_to` |
-
-### Public Keys
-
-| Properties | Description |
-| --- | --- |
-| `name` | The name of the public key. |
-| `method` | The method of generation for the public key. Used by Unchained Capital's Caravan Wallet adopted by FreeRange. Options include `TREZOR`, `LEDGER`, `HERMIT`, `XPUB`, and `TEXT` |
-| `path` | The derivation path used by HD wallets to derive the public / private key pair. An example would be `m/45'/1'/0'`|
-| `public_key` | The actual public key itself. An example would be `tpubDCqcyS5u4bec1UrHCEoDgUJziPtRU3f...` |
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_one` | `account` | `assigned_to` |
-| `has_one` | `key_storage_device` | `private_key_pair_stored_on` |
-| `has_one` | `wallet_address` | `required_for_signature` |
-
-### Wallet Addresses
-
-| Properties | Description |
-| --- | --- |
-| `account_type` | Options include `bitcoin` and `ethereum`. Note there is currently no support for signing Ethereum transactions through the FreeRange webapp, but it is still useful for tracking.  |
-| `address_type` | Used when the `account_type` is `bitcoin`. Options include `P2SH`, `P2SH-P2WSH`, `P2WSH` |
-| `available_balance` | The available balance of the `wallet_address`. | 
-| `address` | The actual address of the wallet. |
-| `name` | The name of the wallet address. |
-| `network` | The blockchain network of the `wallet_address`. Current options are `mainnet` and `testnet`, with future support planned for additional Ethereum testnets. |
-| `token_balance` | *Only needed if tracking tokens.* This describes the balance of additional token types (such as ERC20) attributed to the `wallet address`. Requires `token_contract_address`, `token_decimals`, and `token_symbol` |
-| `token_contract_address` | *Only needed if tracking tokens.* This refers to the address of the actual token contract that manages the logic for the tokens. |
-| `token_decimals` | *Only needed if tracking tokens.* The number of decimals specified in the token contract.  |
-| `token_symbol` | *Only needed if tracking tokens.* The letter symbol used by the token. |
-| `total_balance` | The total balance of the `wallet_address`. |
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_one` | `account` | `assigned_to` |
-| `has_many` | `public_keys` | `required_for_signature` |
-
-### Facilities
-
-An installation, building, or segerated space within used for the operations of organizations. Examples would be a house, bank branch, etc. Some facilities will be more hardened and have different levels of access control than others.
-
-| Properties | Description |
-| --- | --- |
-| `description` | A short description of the facility. |
-| `has_access_records_stored_off_site` | Options are `true` or `false` |
-| `has_alarms` | Options are `true` or `false` |
-| `has_audio_recording` | Options are `true` or `false` |
-| `has_security_cameras` | Options are `true` or `false` |
-| `has_windows` | Options are `true` or `false` |
-| `is_monitored_by_security` | Options are `true` or `false` |
-| `is_a_stand_alone_building` | Options are `true` or `false` |
-| `material_of_ceiling` | Description |
-| `material_of_walls` | Description |
-| `material_of_floor` | Description |
-| `material_of_doors` | Description |
-| `name` | The name of the facility. |
-| `resistance_to_blast` | Indicates the resistance to blast damage on a scale from 1-99, with `1` offering no protective resistance to blast damage, and `99` offering the highest level of resistance to blast damage. |
-| `resistance_to_earthquakes` | Indicates the resistance to earthquake damage on a scale from 1-99, with `1` offering no protective resistance to earthquake damage, and `99` offering the highest level of resistance to earthquake damage. |
-| `resistance_to_emp` | Indicates the resistance to electromagnetic pulse (EMP) damage on a scale from 1-99, with `1` offering no protective resistance to EMP damage, and `99` offering the highest level of resistance to EMP damage. |
-| `resistance_to_fire` | Indicates the resistance to fire damage on a scale from 1-99, with `1` offering no protective resistance to fire damage, and `99` offering the highest level of resistance to fire damage. |
-| `resistance_to_flood` | Indicates the resistance to flood damage on a scale from 1-99, with `1` offering no protective resistance to damage, and `99` offering the highest level of resistance to flood damage. |
-| `resistance_to_forceable_attack` | Indicates the resistance to penetrative forceable attack on a scale from 1-99, with `1` offering no protective resistance to penetrative forceable attack, and `99` offering the highest level of resistance to penetrative forceable attack. |
-| `resistance_to_heat` | Indicates the resistance to heat damage on a scale from 1-99, with `1` offering no protective resistance to heat damage, and `99` offering the highest level of resistance to heat damage. |
-| `resistance_to_hurricanes` | Indicates the resistance to hurricane damage on a scale from 1-99, with `1` offering no protective resistance to hurricane damage, and `99` offering the highest level of resistance to hurricane damage. |
-| `resistance_to_tornadoes` | Indicates the resistance to tornado damage on a scale from 1-99, with `1` offering no protective resistance to tornado damage, and `99` offering the highest level of resistance to tornado damage. |
-| `security_cameras_are_hardened` | Options are `true` or `false` |
-| `type` | The type of facility. |
-| `uses_biometric_access_control` | Options are `true` or `false` |
-| `uses_login_credentials_access_control` | Options are `true` or `false` |
-| `uses_tangible_device_access_control` | Options are `true` or `false` |
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_many` | `containers` | `stored_in` |
-| `has_many` | `key_ceremonies` | `used_in` |
-| `has_many` | `key_managers` | `access` |
-| `has_many` | `key_storage_devices` | `stored_in` |
-| `has_many` | `seed_backups` | `stored_in` |
-| `has_many` | `entropy_sources` | `stored_in` |
-| `has_one` | `location` | `located_at` |
-| `has_many` | `rooms` | `stored_in` |
-
-### Containers
-
-| Properties | Description |
-| --- | --- |
-| `description` | A short description of the container. |
-| `name` | The name of the container. |
-| `resistance_to_blast` | Indicates the resistance to blast damage on a scale from 1-99, with `1` offering no protective resistance to blast damage, and `99` offering the highest level of resistance to blast damage. |
-| `resistance_to_emp` | Indicates the resistance to electromagnetic pulse (EMP) damage on a scale from 1-99, with `1` offering no protective resistance to EMP damage, and `99` offering the highest level of resistance to EMP damage. |
-| `resistance_to_fire` | Indicates the resistance to fire damage on a scale from 1-99, with `1` offering no protective resistance to fire damage, and `99` offering the highest level of resistance to fire damage. |
-| `resistance_to_flood` | Indicates the resistance to flood damage on a scale from 1-99, with `1` offering no protective resistance to damage, and `99` offering the highest level of resistance to flood damage. |
-| `resistance_to_forceable_attack` | Indicates the resistance to penetrative forceable attack on a scale from 1-99, with `1` offering no protective resistance to penetrative forceable attack, and `99` offering the highest level of resistance to penetrative forceable attack. |
-| `resistance_to_heat` | Indicates the resistance to heat damage on a scale from 1-99, with `1` offering no protective resistance to heat damage, and `99` offering the highest level of resistance to heat damage. |
-| `type` | The type of container. ***Options still need to be defined*** |
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_one` | `facility` | `stored_in` |
-| `has_many` | `key_managers` | `access` |
-| `has_many` | `key_storage_devices` | `stored_in` |
-| `has_many` | `seed_backups` | `stored_in` |
-| `has_many` | `entropy_sources` | `stored_in` |
-| `has_one` | `location` | `located_at` |
-
-### Entropy Sources
-
-> *Note: Not all properties have been defined yet. Still in progress.* 
-
-| Properties | Description |
-| --- | --- |
-| `description` | A short description of the entropy source. |
-| `name` | The name of the entropy source. |
-| `type` | The type of entropy source. |
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_one` | `facility` | `stored_in` |
-| `has_one` | `container` | `stored_in` |
-| `has_many` | `key_ceremonies` | `used_in` |
-| `has_many` | `key_managers` | `access` |
-| `has_one` | `location` | `located_at` |
-
-### Key Ceremonies
-
-| Properties | Description |
-| --- | --- |
-| `date` | The date of the key ceremony in `YYYY-MM-DD` format |
-| `description` | A short description of the key_ceremony. |
-| `name` | The name of the key ceremony. |
-| `notes` | Any additional notes pertaining to the ceremony. |
-| `risk_of_compromise` | Indicates the risk of a compromised key generation ceremony, on a scale from 1-99, with `1` indicating the lowest risk of compromise and and `99` offering the highest level of risk. An example of increased risk is using a seed mnenomic generator that is connected to the internet.|
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_many` | `entropy_sources` | `used_in` |
-| `has_many` | `key_managers` | `participated_in` |
-| `has_one` | `location` | `located_at` |
-| `has_one` | `room` | `used_in` |
-| `has_many` | `seeds` | `generated` |
-| `has_many` | `seed_backups` | `generated` |
-
-
-### Key Managers
-
-| Properties | Description |
-| --- | --- |
-| `description` | A short description of the key manager. |
-| `email` | The key manager's email address. Can be used for login as a future feature |
-| `employee_id` | Useful as a cross-reference feature if an organization has an existing HR infrastructure |
-| `has_background_check` | A booleen value to check if the Key Manager was properly background checked. |
-| `name` | If the key manager has a name, this is a good place to document it. |
-| `phone_number` | Contact phone number. |
-| `risk_of_fraud_collusion` | Indicates the risk of fraud collusion with another `key_manager` on a scale from 1-99, with `1` indicating the lowest risk of fraud collusion and and `99` offering the highest level of risk. |
-| `title` | The formal title of the key manager. |
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_many` | `facilities` | `access` |
-| `has_many` | `containers` | `access` |
-| `has_many` | `key_ceremonies` | `participated_in` |
-| `has_many` | `key_storage_devices` | `access` |
-| `has_many` | `entropy_sources` | `access` |
-| `has_many` | `locations` | `access` |
-| `has_one` | `location` | `located_at` |
-| `has_many` | `rooms` | `access` |
-| `has_one` | `organization` | `belongs_to` |
-
-### Key Storage Devices
-
-| Properties | Description |
-| --- | --- |
-| `description` | A short description of the key storage device. |
-| `name` | The name of the key storage device. |
-| `type` | The type of key storage device. |
-| `risk_of_compromise` | Indicates the risk of a compromised key storage, on a scale from 1-99, with `1` indicating the lowest risk of compromise and and `99` offering the highest level of risk. An example of increased risk is poor access control standards or bad device sanitation procedures.|
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_one` | `facility` | `stored_in` |
-| `has_one` | `container` | `stored_in` |
-| `has_many` | `key_managers` | `access` |
-| `has_one` | `location` | `located_at` |
-| `has_one` | `organization` | `belongs_to` |
-| `has_many` | `public_keys` | `private_key_pair_stored_on` |
-| `has_many` | `room` | `stored_in` |
-| `has_one` | `seed` | `seeded` |
-
-### Computers
-
-| Properties | Description |
-| --- | --- |
-| `description` | A short description of the computer. |
-| `name` | The name of the computer. |
-| `type` | The type of computer. |
-| `risk_of_compromise` | Indicates the risk of a compromised computer in use by the organization, on a scale from 1-99, with `1` indicating the lowest risk of compromise and and `99` offering the highest level of risk. An example of increased risk is using a seed mnenomic generator that is connected to the internet.|
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_one` | `facility` | `stored_in` |
-| `has_one` | `container` | `stored_in` |
-| `has_many` | `key_ceremonies` | `used_in` |
-| `has_many` | `key_managers` | `access` |
-| `has_one` | `location` | `located_at` |
-
-### Rooms
-
-A physical space within a facility, such as a vault for storing and securing `key_storage_devices`, or a windowless room for holding `key_ceremony` events.
-
-| Properties | Description |
-| --- | --- |
-| `description` | A short description of the room. |
-| `has_access_records_stored_off_site` | Options are `true` or `false` |
-| `has_alarms` | Options are `true` or `false` |
-| `has_audio_recording` | Options are `true` or `false` |
-| `has_security_cameras` | Options are `true` or `false` |
-| `has_windows` | Options are `true` or `false` |
-| `is_monitored_by_security` | Options are `true` or `false` |
-| `is_a_stand_alone_building` | Options are `true` or `false` |
-| `material_of_ceiling` | Description |
-| `material_of_walls` | Description |
-| `material_of_floor` | Description |
-| `material_of_doors` | Description |
-| `name` | The name of the room. |
-| `resistance_to_blast` | Indicates the resistance to blast damage on a scale from 1-99, with `1` offering no protective resistance to blast damage, and `99` offering the highest level of resistance to blast damage. |
-| `resistance_to_earthquakes` | Indicates the resistance to earthquake damage on a scale from 1-99, with `1` offering no protective resistance to earthquake damage, and `99` offering the highest level of resistance to earthquake damage. |
-| `resistance_to_emp` | Indicates the resistance to electromagnetic pulse (EMP) damage on a scale from 1-99, with `1` offering no protective resistance to EMP damage, and `99` offering the highest level of resistance to EMP damage. |
-| `resistance_to_fire` | Indicates the resistance to fire damage on a scale from 1-99, with `1` offering no protective resistance to fire damage, and `99` offering the highest level of resistance to fire damage. |
-| `resistance_to_flood` | Indicates the resistance to flood damage on a scale from 1-99, with `1` offering no protective resistance to damage, and `99` offering the highest level of resistance to flood damage. |
-| `resistance_to_forceable_attack` | Indicates the resistance to penetrative forceable attack on a scale from 1-99, with `1` offering no protective resistance to penetrative forceable attack, and `99` offering the highest level of resistance to penetrative forceable attack. |
-| `resistance_to_heat` | Indicates the resistance to heat damage on a scale from 1-99, with `1` offering no protective resistance to heat damage, and `99` offering the highest level of resistance to heat damage. |
-| `resistance_to_hurricanes` | Indicates the resistance to hurricane damage on a scale from 1-99, with `1` offering no protective resistance to hurricane damage, and `99` offering the highest level of resistance to hurricane damage. |
-| `resistance_to_tornadoes` | Indicates the resistance to tornado damage on a scale from 1-99, with `1` offering no protective resistance to tornado damage, and `99` offering the highest level of resistance to tornado damage. |
-| `security_cameras_are_hardened` | Options are `true` or `false` |
-| `type` | The type of room. |
-| `uses_biometric_access_control` | Options are `true` or `false` |
-| `uses_login_credentials_access_control` | Options are `true` or `false` |
-| `uses_tangible_device_access_control` | Options are `true` or `false` |
-
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_one` | `facility` | `stored_in` |
-| `has_many` | `containers` | `stored_in` |
-| `has_many` | `key_ceremonies` | `used_in` |
-| `has_many` | `key_managers` | `access` |
-| `has_many` | `key_storage_devices` | `stored_in` |
-| `has_many` | `seed_backups` | `stored_in` |
-| `has_many` | `entropy_sources` | `stored_in` |
-| `has_one` | `location` | `located_at` |
-
-### Seed Backups
-
-| Properties | Description |
-| --- | --- |
-| `description` | A short description of the seed backup. |
-| `is_encrypted` | Boolean on whether the seed backup is encrypted. Options are `true` or `false` |
-| `storage_medium` | The storage medium of seed backup. Options include `electronic`, `metal`, `paper`, or `other` |
-| `minimum_shares` | The minimum number of shares needed to reproduce the seed |
-| `name` | The name of the seed backup. An example would be 'Seed backup 1 of 3' |
-| `notes` | Additional notes that might be useful. |
-| `risk_of_compromise` | Indicates the risk of a compromised seed backup, on a scale from 1-99, with `1` indicating the lowest risk of compromise and and `99` offering the highest level of risk. An example of increased risk is using an unencrypted paper storage medium.|
-| `total_shares` | The total number of shares created |
-| `type` | The type of seed backup scheme. Options include `split_mnemonic`, `shamir`, `whole`, or `other` |
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_one` | `facility` | `stored_in` |
-| `has_one` | `container` | `stored_in` |
-| `has_many` | `key_managers` | `` |
-| `has_many` | `key_managers` | `has_access_to` |
-| `has_one` | `location` | `located_at` |
-| `has_one` | `room` | `stored_in` |
-| `has_one` | `seed` | `generated` |
-
-### Seeds
-
-| Properties | Description |
-| --- | --- |
-| `description` | A short description of the seed. |
-| `mnemonic_words_total` | The total number of words used in the mnemonic.  |
-| `risk_of_compromise` | Indicates the risk of a compromised seed, on a scale from 1-99, with `1` indicating the lowest risk of compromise and and `99` offering the highest level of risk. An example of increased risk is relying on only one source of entropy for generation. |
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_one` | `key_ceremony` | `generated` |
-| `has_many` | `key_storage_devices` | `seeded` |
-| `has_many` | `seed_backups` | `generated` |
-
-### Locations
-
-Location parameters were designed to be agnostic regardless of jurisdiction. 
-For example, documenting the location of a key storage device in Costa Rica would be difficult using 
-a traditonal address schema, as many streets have no name and many buildngs do not have numbers assigned.
-
-Latitude and Longitude are available parameters, along with fields such as `landmark` and `natural_feature`.
-We tried to account for multiple methodologies when choosing a location for storing device and seed backups, from
-bank locations where safe deposit boxes are located, to 
-> *"A hole dug in the backyard behind the shed in a yard with a large fence and camera system." - Josh M.*
-
-| Properties | Description |
-| --- | --- |
-| `administrative_area_level_1` | indicates a first-order civil entity below the country level. Within the United States, these administrative levels are states. Not all nations exhibit these administrative levels. In most cases, administrative_area_level_1 short names will closely match ISO 3166-2 subdivisions and other widely circulated lists; however this is not guaranteed as our geocoding results are based on a variety of signals and location data. |
-| `administrative_area_level_2` | indicates a second-order civil entity below the country level. Within the United States, these administrative levels are counties. Not all nations exhibit these administrative levels. |
-| `administrative_area_level_3` | indicates a third-order civil entity below the country level. This type indicates a minor civil division. Not all nations exhibit these administrative levels. |
-| `administrative_area_level_4` | indicates a fourth-order civil entity below the country level. This type indicates a minor civil division. Not all nations exhibit these administrative levels. |
-| `administrative_area_level_5` | indicates a fifth-order civil entity below the country level. This type indicates a minor civil division. Not all nations exhibit these administrative levels. |
-| `border_color` | Used for the node's sprite border color. Rendered with ThreeJS/WebGl. |
-| `background_color` | Used for the node's sprite color. Rendered with ThreeJS/WebGl. |
-| `country` | indicates the national political entity. |
-| `description` | A short description of the location. |
-| `floor` | indicates the floor of a building address. |
-| `intersection` | indicates a major intersection, usually of two major roads. |
-| `landmark` | indicates a nearby place that is used as a reference, to aid navigation. |
-| `lat` | Latitude in decimal format. |
-| `locality` | indicates an incorporated city or town political entity. |
-| `lng` | Longitude in decimal format. |
-| `name` | indicates the name of the location |
-| `natural_feature` | indicates a prominent natural feature. |
-| `neighborhood` | indicates a named neighborhood. |
-| `park` | indicates a named park. |
-| `plus_code` | indicates an encoded location reference, derived from latitude and longitude. Plus codes can be used as a replacement for street addresses in places where they do not exist (where buildings are not numbered or streets are not named). See https://plus.codes for details. |
-| `point_of_interest` | indicates a named point of interest. Typically, these "POI"s are prominent local entities that don`t easily fit in another category, such as "Empire State Building" or "Eiffel Tower". |
-| `postal_code` | indicates a postal code as used to address postal mail within the country. |
-| `postal_town` | indicates a grouping of geographic areas, such as locality and sublocality, used for mailing addresses in some countries. |
-| `post_box` | indicates a specific postal box. |
-| `premise` | indicates a named location, usually a building or collection of buildings with a common name. |
-| `room` | indicates the room of a building address. |
-| `risk_of_blast_damage` | indicates the risk of blast damage at this location over time, on a scale from 1-99, with `1` indicating the lowest risk and `99` indicating the highest risk. | 
-| `risk_of_earthquake_damage` | indicates the risk of earthquake damage at this location over time, on a scale from 1-99, with `1` indicating the lowest risk and `99` indicating the highest risk. | 
-| `risk_of_emp_damage` | indicates the risk of electromagnetic pulse damage at this location over time, on a scale from 1-99, with `1` indicating the lowest risk and `99` indicating the highest risk. | 
-| `risk_of_fire_damage` | indicates the risk of fire damage at this location over time, on a scale from 1-99, with `1` indicating the lowest risk and `99` indicating the highest risk. | 
-| `risk_of_flood_damage` | indicates the risk of flood damage at this location over time, on a scale from 1-99, with `1` indicating the lowest risk and `99` indicating the highest risk. | 
-| `risk_of_jurisdiction` | indicates the risk of jurisdictional instability at this location over time, on a scale from 1-99, with `1` indicating the lowest risk and `99` indicating the highest risk. | 
-| `risk_of_heat_damage` | indicates the risk of heat damage at this location over time, on a scale from 1-99, with `1` indicating the lowest risk and `99` indicating the highest risk. | 
-| `risk_of_hurricane_damage` | indicates the risk of hurricane damage at this location over time, on a scale from 1-99, with `1` indicating the lowest risk and `99` indicating the highest risk. | 
-| `risk_of_tornado_damage` | indicates the risk of tornado damage at this location over time, on a scale from 1-99, with `1` indicating the lowest risk and `99` indicating the highest risk. | 
-| `route` | indicates a named route (such as "US 101"). |
-| `street_address` | indicates a precise street address. |
-| `street_number` | indicates the precise street number. |
-| `subpremise` | indicates a first-order entity below a named location, usually a singular building within a collection of buildings with a common name. |
-| `type` | indicates the location type. |
-
-| Associations | Node | Relationship |
-| --- | --- | --- |
-| `has_many` | `facilities` | `located_at` |
-| `has_many` | `computers` | `located_at` |
-| `has_many` | `containers` | `located_at` |
-| `has_many` | `entropy_sources` | `located_at` |
-| `has_many` | `key_ceremonies` | `located_at` |
-| `has_many` | `key_managers` | `located_at` |
-| `has_many` | `key_storage_devices` | `located_at` |
-| `has_many` | `organizations` | `located_at` |
-| `has_many` | `rooms` | `located_at` |
-| `has_many` | `seed_backups` | `located_at` |
+  - [`accounts`](api_docs/accounts/accounts.md)
+  - [`computers`](api_docs/computers/computers.md)
+  - [`containers`](api_docs/containers/containers.md)
+  - [`entropy_sources`](api_docs/entropy_sources/entropy_sources.md)
+  - [`facilities`](api_docs/facilities/facilities.md)
+  - [`key_ceremonies`](api_docs/key_ceremonies/key_ceremonies.md)
+  - [`key_managers`](api_docs/key_managers/key_managers.md)
+  - [`key_storage_devices`](api_docs/key_storage_devices/key_storage_devices.md)
+  - [`locations`](api_docs/locations/locations.md)
+  - [`organizations`](api_docs/organizations/organizations.md)
+  - [`public_keys`](api_docs/public_keys/public_keys.md)
+  - [`rooms`](api_docs/rooms/rooms.md)
+  - [`seeds`](api_docs/seeds/seeds.md)
+  - [`seed_backups`](api_docs/seed_backups/seed_backups.md)
+  - [`wallet_addresses`](api_docs/wallet_addresses/wallet_addresses.md)
