@@ -1,4 +1,4 @@
-# FreeRange Custody 
+# FreeRange Custody API
 
 `fr-custody-api` is a bank-grade solution for organizations wanting to self-custody digital assets.
 
