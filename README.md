@@ -1,18 +1,38 @@
-# FreeRange Custody API
+# FreeRange Custody API Documentation
 
-`fr-custody-api` is a bank-grade solution for organizations wanting to self-custody digital assets.
+`fr-custody-api` is a backend solution for **designing**, **managing**, and / or **auditing** an organization's crypto self-custody operations. 
 
-The primary objective of this API is to quickly help organizations deploy and manage cold-storage operations at scale. 
+> *Note: Originally designed for banks seeking to comply with the Wyoming Division of Banking's rules for digital asset custody.* 
 
-#### Key design features include:
+Useful for: 
+- Financial institutions
+- Bank examiners
+- Auditing firms
+- Private offices
+- Any group or organization wanting to self-custody crypto-assets.
 
-- **Bank-grade custody.** Originally designed for banks *(including our own)* seeking compliance with the Wyoming Division of Banking's rules for digital asset custody. See FreeRange's story in [Wired Magazine](https://www.wired.com/story/newest-haven-cryptocurrency-companies-wyoming/).    
-- **Powerful analytics for risk management.** Built on a graph database with technical assistance from Sandia National Laboratories *through the New Mexico Small Business Assistance program.* 
+### Key Features
+
+**Design bank-grade self-custody solutions**
+- Document and plan out the infrastructure needed for self-custody operations. 
+- Analyze an organization's existing facilities, or plan out a system that leverages the safe deposit boxes of other banks. 
+- Model how many team members are needed to act as key managers.
+- and more...
+
+**Manage self-custody operations at scale** 
+- Track team member access to key storage devices and seed backups.
+- Generate and manage accounts.
+- Document everything needed for key ceremony events.    
+ 
+**Powerful analytics tools for auditing and risk management.** 
+- Built with technical assistance from Sandia National Laboratories. 
+- Leverage graph data algorithms to uncover gaps and weaknesses in an organization's custody operations
+- Determine risk of fraud collusion, seed compromise, key ceremony compromise, penetrative forced intrusion of storage facilities, and much more...
+- Generate reports needed for compliance  
+
 > *Note: Sandia National Laboratories are also customers of FreeRange for digital asset risk management and procrument. Find out more about the mission of Sandia National Labs [here](https://www.sandia.gov).*   
 
-**Security is our primary focus.** Unlike 3rd party custodial solutions such as Curv and Anchorage, FreeRange never stores, generates or has access to an organization's private keys.
-
-The technical build overview can be found [here](/build_overview.md).
+**Security is our primary focus.** FreeRange never stores, generates or has access to an organization's private keys.
 
 ## Database Schema Overview
 
