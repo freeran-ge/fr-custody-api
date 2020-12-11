@@ -34,11 +34,13 @@ A physical space within a facility, such as a vault for storing and securing `ke
 | `resistance_to_hurricanes` | Indicates the resistance to hurricane damage on a scale from 1-99, with `1` offering no protective resistance to hurricane damage, and `99` offering the highest level of resistance to hurricane damage. |
 | `resistance_to_tornadoes` | Indicates the resistance to tornado damage on a scale from 1-99, with `1` offering no protective resistance to tornado damage, and `99` offering the highest level of resistance to tornado damage. |
 | `security_cameras_are_hardened` | Options are `true` or `false` |
+| `share_build_with_community` | Posts a version of your `room` to the community.  Options are `true` or `false` |
 | `type` | The type of room. |
 | `uses_biometric_access_control` | Options are `true` or `false` |
 | `uses_login_credentials_access_control` | Options are `true` or `false` |
 | `uses_tangible_device_access_control` | Options are `true` or `false` |
 
+## Associations
 
 | Associations | Node | Relationship |
 | --- | --- | --- |
@@ -50,3 +52,9 @@ A physical space within a facility, such as a vault for storing and securing `ke
 | `has_many` | `seed_backups` | `stored_in` |
 | `has_many` | `entropy_sources` | `stored_in` |
 | `has_one` | `location` | `located_at` |
+
+## API endpoints
+
+Endpoints for viewing and manipulating `rooms` that the `user` has permissions to access. Requires a valid token to be included in the header of the request. A token can be acquired using [user login](../../api_docs/open/login.md) : `POST /user/sign_in`
+
+Coming soon...
