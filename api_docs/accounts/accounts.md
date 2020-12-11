@@ -23,7 +23,7 @@
 | `email` | The email address to be used in case notifications regarding the `account` need to be sent.  |
 | `name` | The name of the account. |
 | `network` | The blockchain network of the `account_type`. Current options are `mainnet` and `testnet`, with future support planned for additional Ethereum testnets. |
-| `required_signers` | The minimum number of signers needed for signing transactions. Can be one, but this will render the multi-sig bitcoin wallet feature non-functional for the FreeRange front end. Still useful for tracking non-compliance with C4 standards. |
+| `required_signers` | The minimum number of signers needed for signing transactions. |
 | `token_balance` | *Only needed if tracking tokens.* This describes the balance of additional token types (such as ERC20) attributed to the wallet addresses of the account. Requires `token_contract_address`, `token_decimals`, and `token_symbol` |
 | `token_contract_address` | *Only needed if tracking tokens.* This refers to the address of the actual token contract that manages the logic for the tokens. |
 | `token_decimals` | *Only needed if tracking tokens.* The number of decimals specified in the token contract.  |
