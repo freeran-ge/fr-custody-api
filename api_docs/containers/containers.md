@@ -21,7 +21,16 @@ A physical object used for storing and securing items such as `key_storage_devic
 | `resistance_to_flood` | Indicates the resistance to flood damage on a scale from 1-99, with `1` offering no protective resistance to damage, and `99` offering the highest level of resistance to flood damage. |
 | `resistance_to_forceable_attack` | Indicates the resistance to penetrative forceable attack on a scale from 1-99, with `1` offering no protective resistance to penetrative forceable attack, and `99` offering the highest level of resistance to penetrative forceable attack. |
 | `resistance_to_heat` | Indicates the resistance to heat damage on a scale from 1-99, with `1` offering no protective resistance to heat damage, and `99` offering the highest level of resistance to heat damage. |
-| `type` | The type of container. ***Options still need to be defined*** |
+| `share_build_with_community` | Posts a version of your container build to the community.  Options are `true` or `false` |
+| `url_link` | The url link where the item can be found. |
+| `uses_biometric_access_control` | Options are `true` or `false` |
+| `uses_combination_lock` | Options are `true` or `false` |
+| `uses_login_credentials_access_control` | Options are `true` or `false` |
+| `uses_pin_tumbler_locks` | Options are `true` or `false` |
+| `uses_tangible_device_access_control` | Options are `true` or `false` |
+| `type` | The type of container. Options are `bag`, `safe`, `safe_deposit_box`, or `other`|
+
+## Associations
 
 | Associations | Node | Relationship |
 | --- | --- | --- |
@@ -34,11 +43,13 @@ A physical object used for storing and securing items such as `key_storage_devic
 
 ## API endpoints
 
-Endpoints for viewing and manipulating the Accounts that the Authenticated User
-has permissions to access.
+Endpoints for viewing and manipulating `containers` that the `user` has permissions to access. Requires a valid token to be included in the header of the request. A token can be acquired using [user login](../../api_docs/open/login.md) : `POST /user/sign_in`
 
-* [Show Accessible Containers](api_docs/containers/get.md) : `GET /containers/`
+<!-- * [Show Accessible Containers](api_docs/containers/get.md) : `GET /containers/`
 * [Create A Container](api_docs/containers/post.md) : `POST /containers/`
+* [Show A Container](api_docs/containers/id/get.md) : `GET /containers/:id/`
+* [Update A Container](api_docs/containers/id/put.md) : `PUT /containers/:id/`
+* [Delete A Container](api_docs/containers/id/delete.md) : `DELETE /containers/:id/` -->
 * [Show A Container](api_docs/containers/id/get.md) : `GET /containers/:id/`
 * [Update A Container](api_docs/containers/id/put.md) : `PUT /containers/:id/`
 * [Delete A Container](api_docs/containers/id/delete.md) : `DELETE /containers/:id/`
