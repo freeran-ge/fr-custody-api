@@ -21,7 +21,7 @@ A physical object used for storing and securing items such as `key_storage_devic
 | `resistance_to_flood` | Indicates the resistance to flood damage on a scale from 1-99, with `1` offering no protective resistance to damage, and `99` offering the highest level of resistance to flood damage. |
 | `resistance_to_forceable_attack` | Indicates the resistance to penetrative forceable attack on a scale from 1-99, with `1` offering no protective resistance to penetrative forceable attack, and `99` offering the highest level of resistance to penetrative forceable attack. |
 | `resistance_to_heat` | Indicates the resistance to heat damage on a scale from 1-99, with `1` offering no protective resistance to heat damage, and `99` offering the highest level of resistance to heat damage. |
-| `share_build_with_community` | Posts a version of your container build to the community.  Options are `true` or `false` |
+| `share_build_with_community` | Posts a version of your computer build to the community.  Options are `true` or `false` |
 | `url_link` | The url link where the item can be found. |
 | `uses_biometric_access_control` | Options are `true` or `false` |
 | `uses_combination_lock` | Options are `true` or `false` |
