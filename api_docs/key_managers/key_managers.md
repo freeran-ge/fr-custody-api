@@ -9,6 +9,8 @@
 
 Members of `organizations` that have access to `key_storage_devices`, `seed_backups` and / or help generate `seeds` during `key_ceremonies
 
+## Properties
+
 | Properties | Description |
 | --- | --- |
 | `description` | A short description of the key manager. |
@@ -19,6 +21,8 @@ Members of `organizations` that have access to `key_storage_devices`, `seed_back
 | `phone_number` | Contact phone number. |
 | `risk_of_fraud_collusion` | Indicates the risk of fraud collusion with another `key_manager` on a scale from 1-99, with `1` indicating the lowest risk of fraud collusion and and `99` offering the highest level of risk. |
 | `title` | The formal title of the key manager. |
+
+## Associations
 
 | Associations | Node | Relationship |
 | --- | --- | --- |
@@ -34,12 +38,12 @@ Members of `organizations` that have access to `key_storage_devices`, `seed_back
 
 ## API endpoints
 
-Endpoints for viewing and manipulating the Key Managers that the Authenticated User
-has permissions to access.
+Endpoints for viewing and manipulating `key_managers` that the `user` has permissions to access. Requires a valid token to be included in the header of the request. A token can be acquired using [user login](../../api_docs/open/login.md) : `POST /user/sign_in`
 
-* [Show Accessible Key Managers](api_docs/key_managers/get.md) : `GET /key_managers/`
+Coming soon...
+<!-- * [Show Accessible Key Managers](api_docs/key_managers/get.md) : `GET /key_managers/`
 * [Create A Key Manager](api_docs/key_managers/post.md) : `POST /key_managers/`
 * [Show A Key Manager](api_docs/key_managers/id/get.md) : `GET /key_managers/:id/`
 * [Show A Key Manager's Relationships](api_docs/key_managers/id/graph_data/get.md) : `GET /key_managers/:id/graph_data`
 * [Update A Key Manager](api_docs/key_managers/id/put.md) : `PUT /key_managers/:id/`
-* [Delete A Key Manager](api_docs/key_managers/id/delete.md) : `DELETE /key_managers/:id/`
+* [Delete A Key Manager](api_docs/key_managers/id/delete.md) : `DELETE /key_managers/:id/` -->
