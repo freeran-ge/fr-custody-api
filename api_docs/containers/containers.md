@@ -50,6 +50,3 @@ Endpoints for viewing and manipulating `containers` that the `user` has permissi
 * [Show A Container](api_docs/containers/id/get.md) : `GET /containers/:id/`
 * [Update A Container](api_docs/containers/id/put.md) : `PUT /containers/:id/`
 * [Delete A Container](api_docs/containers/id/delete.md) : `DELETE /containers/:id/` -->
-* [Show A Container](api_docs/containers/id/get.md) : `GET /containers/:id/`
-* [Update A Container](api_docs/containers/id/put.md) : `PUT /containers/:id/`
-* [Delete A Container](api_docs/containers/id/delete.md) : `DELETE /containers/:id/`
