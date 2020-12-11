@@ -27,7 +27,6 @@
 | --- | --- | --- |
 | `has_one` | `facility` | `stored_in` |
 | `has_one` | `container` | `stored_in` |
-| `has_many` | `key_managers` | `` |
 | `has_many` | `key_managers` | `has_access_to` |
 | `has_one` | `location` | `located_at` |
 | `has_one` | `room` | `stored_in` |
