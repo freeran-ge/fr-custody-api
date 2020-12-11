@@ -43,6 +43,7 @@ bank locations where safe deposit boxes are located, to
 | `postal_town` | indicates a grouping of geographic areas, such as locality and sublocality, used for mailing addresses in some countries. |
 | `post_box` | indicates a specific postal box. |
 | `premise` | indicates a named location, usually a building or collection of buildings with a common name. |
+| `share_location_data_with_community` | Posts a version of the `location` data you created to the community.  Options are `true` or `false` |
 | `room` | indicates the room of a building address. |
 | `risk_of_blast_damage` | indicates the risk of blast damage at this location over time, on a scale from 1-99, with `1` indicating the lowest risk and `99` indicating the highest risk. | 
 | `risk_of_earthquake_damage` | indicates the risk of earthquake damage at this location over time, on a scale from 1-99, with `1` indicating the lowest risk and `99` indicating the highest risk. | 
@@ -59,6 +60,8 @@ bank locations where safe deposit boxes are located, to
 | `subpremise` | indicates a first-order entity below a named location, usually a singular building within a collection of buildings with a common name. |
 | `type` | indicates the location type. ***Options still need to be created*** |
 
+## Associations
+
 | Associations | Node | Relationship |
 | --- | --- | --- |
 | `has_many` | `facilities` | `located_at` |
@@ -72,11 +75,14 @@ bank locations where safe deposit boxes are located, to
 | `has_many` | `rooms` | `located_at` |
 | `has_many` | `seed_backups` | `located_at` |
 
-Endpoints for viewing and manipulating the Accounts that the Authenticated User
-has permissions to access.
+## API endpoints
 
-* [Show Accessible Locations](api_docs/locations/get.md) : `GET /locations/`
+Endpoints for viewing and manipulating `locations` that the `user` has permissions to access. Requires a valid token to be included in the header of the request. A token can be acquired using [user login](../../api_docs/open/login.md) : `POST /user/sign_in`
+
+Coming soon...
+
+<!-- * [Show Accessible Locations](api_docs/locations/get.md) : `GET /locations/`
 * [Create A Location](api_docs/locations/post.md) : `POST /locations/`
 * [Show A Location](api_docs/locations/id/get.md) : `GET /locations/:id/`
 * [Update A Location](api_docs/locations/id/put.md) : `PUT /locations/:id/`
-* [Delete A Location](api_docs/locations/id/delete.md) : `DELETE /locations/:id/`
+* [Delete A Location](api_docs/locations/id/delete.md) : `DELETE /locations/:id/` -->
