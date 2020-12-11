@@ -17,6 +17,8 @@ Procedural events where `organizations` generates unique public / private root k
 | `notes` | Any additional notes pertaining to the ceremony. |
 | `risk_of_compromise` | Indicates the risk of a compromised key generation ceremony, on a scale from 1-99, with `1` indicating the lowest risk of compromise and and `99` offering the highest level of risk. An example of increased risk is using a seed mnenomic generator that is connected to the internet.|
 
+## Associations
+
 | Associations | Node | Relationship |
 | --- | --- | --- |
 | `has_many` | `entropy_sources` | `used_in` |
@@ -25,3 +27,7 @@ Procedural events where `organizations` generates unique public / private root k
 | `has_one` | `room` | `used_in` |
 | `has_many` | `seeds` | `generated` |
 | `has_many` | `seed_backups` | `generated` |
+
+## API endpoints
+
+Endpoints for viewing and manipulating `key_ceremonies` that the `user` has permissions to access. Requires a valid token to be included in the header of the request. A token can be acquired using [user login](../../api_docs/open/login.md) : `POST /user/sign_in`
