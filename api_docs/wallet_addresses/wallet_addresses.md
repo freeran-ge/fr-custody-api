@@ -15,13 +15,18 @@ An address on a blockchain network used for the assignment and accounting of dig
 | `address_type` | Used when the `account_type` is `bitcoin`. Options include `P2SH`, `P2SH-P2WSH`, `P2WSH` |
 | `available_balance` | The available balance of the `wallet_address`. | 
 | `address` | The actual address of the wallet. |
+| `description` | The description of the wallet address. |
 | `name` | The name of the wallet address. |
 | `network` | The blockchain network of the `wallet_address`. Current options are `mainnet` and `testnet`, with future support planned for additional Ethereum testnets. |
+| `required_signers` | The required number of signers that are needed for signing a transaction |
 | `token_balance` | *Only needed if tracking tokens.* This describes the balance of additional token types (such as ERC20) attributed to the `wallet address`. Requires `token_contract_address`, `token_decimals`, and `token_symbol` |
 | `token_contract_address` | *Only needed if tracking tokens.* This refers to the address of the actual token contract that manages the logic for the tokens. |
 | `token_decimals` | *Only needed if tracking tokens.* The number of decimals specified in the token contract.  |
 | `token_symbol` | *Only needed if tracking tokens.* The letter symbol used by the token. |
 | `total_balance` | The total balance of the `wallet_address`. |
+| `total_signers` | The total number of signers that are available for signing a transaction |
+
+## Associations
 
 | Associations | Node | Relationship |
 | --- | --- | --- |
@@ -30,11 +35,10 @@ An address on a blockchain network used for the assignment and accounting of dig
 
 ## API endpoints
 
-Endpoints for viewing and manipulating the `wallet_addresses` that the `user`
-has permissions to access.
+Endpoints for viewing and manipulating `wallet_addresses` that the `user` has permissions to access. Requires a valid token to be included in the header of the request. A token can be acquired using [user login](../../api_docs/open/login.md) : `POST /user/sign_in`
 
-* [Show Accessible Wallet Addresses] : `GET /wallet_addresses/`
+<!-- * [Show Accessible Wallet Addresses] : `GET /wallet_addresses/`
 * [Create A Wallet Address] : `POST /wallet_addresses/`
 * [Show A Wallet Address] : `GET /wallet_addresses/:id/`
 * [Update A Wallet Address] : `PUT /wallet_addresses/:id/`
-* [Delete A Wallet Address] : `DELETE /wallet_addresses/:id/`
+* [Delete A Wallet Address] : `DELETE /wallet_addresses/:id/` -->
